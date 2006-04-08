@@ -146,7 +146,7 @@ use XML::Simple;
 use Digest::MD5;
 use Date::Calc qw/ Add_Delta_Days Today This_Year /;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 my $rv;
 *hash = \&Digest::MD5::md5_hex;
 
@@ -882,13 +882,23 @@ sub register_domain
         'Zimbabwe'                               => 'ZW'
     );  # end suckage
 
+    # attempt countryname translation if needed
+    if ( $c->{country} !~ m/^[A-Z]{2,3}$/ ) {
+    	$c->{country} = $country_codes{$c->{country}};
+
+        unless ( defined( $c->{country} ) ) {
+            $self->debug("Invalid country.");
+            return undef;
+        }
+    }
+
     # build contact hashref from customer info.
     my $contact_info = {
         first_name  => $c->{firstname},
         last_name   => $c->{lastname},
         city        => $c->{city},
         state       => $c->{state},
-        country     => $country_codes{ $c->{country} },
+        country     => $c->{country},
         address1    => $c->{address},
         postal_code => $c->{zip},
         email       => $c->{email},

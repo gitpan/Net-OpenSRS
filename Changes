@@ -1,2 +1,6 @@
 0.01 Thu Feb 16 2006
     - Initial release to CPAN.  Yay.
+
+0.02 Sat Apr 8 2006
+    - Allow countries to be two letter codes or the full country name.
+      Contributed by Sten Spans <sten@bit.nl>.
