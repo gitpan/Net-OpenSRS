@@ -4,7 +4,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
     NAME          => 'Net::OpenSRS',
-    AUTHOR        => 'Mahlon E. Smith <mahlon@martini.nu>',
+    AUTHOR        => 'Richard L. Siddall <opensrs@elirion.net>', # Really just maintainer
     VERSION_FROM  => 'lib/Net/OpenSRS.pm',
     ABSTRACT_FROM => 'lib/Net/OpenSRS.pm',
     PL_FILES      => {},

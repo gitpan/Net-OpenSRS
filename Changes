@@ -4,3 +4,7 @@
 0.02 Sat Apr 8 2006
     - Allow countries to be two letter codes or the full country name.
       Contributed by Sten Spans <sten@bit.nl>.
+
+0.03 Tue Sep 1 2009
+    - Ugly fix for Expat parser error due to spaces in an element name
+      in the OpenSRS renew domain response.

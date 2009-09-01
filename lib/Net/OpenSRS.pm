@@ -1,3 +1,7 @@
+=head1 NAME
+
+Net::OpenSRS - Domain registration via the Tucows OpenSRS HTTPS XML API
+
 =head1 Description
 
 This is a wrapper interface to the DNS portions of the Tucows OpenSRS
@@ -146,7 +150,7 @@ use XML::Simple;
 use Digest::MD5;
 use Date::Calc qw/ Add_Delta_Days Today This_Year /;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 my $rv;
 *hash = \&Digest::MD5::md5_hex;
 
@@ -1159,7 +1163,10 @@ XML
     my $struct;
     if ( $res->is_success ) {
         $self->debug("HTTP result: " . $res->status_line);
-        eval { $struct = XML::Simple::XMLin( $res->content); };
+        my $rslt = $res->content;
+        # OpenSRS renew response triggers Expat parser error due to spaces in element name
+        $rslt =~ s/registration expiration date/registration_expiration_date/g;
+        eval { $struct = XML::Simple::XMLin( $rslt ); };
 
         if ($self->debug_level > 1) {
             $self->debug("\nOpenSRS Response XML:\n" . '-' x 30);
