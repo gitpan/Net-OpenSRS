@@ -8,3 +8,6 @@
 0.03 Tue Sep 1 2009
     - Ugly fix for Expat parser error due to spaces in an element name
       in the OpenSRS renew domain response.
+
+0.04
+   -  Correct de-nastification to handle lists

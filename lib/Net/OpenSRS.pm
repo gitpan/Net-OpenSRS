@@ -150,7 +150,7 @@ use XML::Simple;
 use Digest::MD5;
 use Date::Calc qw/ Add_Delta_Days Today This_Year /;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 my $rv;
 *hash = \&Digest::MD5::md5_hex;
 
@@ -1166,7 +1166,13 @@ XML
         my $rslt = $res->content;
         # OpenSRS renew response triggers Expat parser error due to spaces in element name
         $rslt =~ s/registration expiration date/registration_expiration_date/g;
-        eval { $struct = XML::Simple::XMLin( $rslt ); };
+
+        eval { $struct = XML::Simple::XMLin(
+                 $rslt,
+                 'KeyAttr' => [ 'dt_assoc' ],
+                 'GroupTags' => { 'dt_assoc' => 'item',  'dt_array' => 'item' },
+               );
+        };
 
         if ($self->debug_level > 1) {
             $self->debug("\nOpenSRS Response XML:\n" . '-' x 30);
@@ -1176,10 +1182,7 @@ XML
 
         # get the struct looking just how we want it.
         # (de-nastify it.)
-        $xml = XML::Simple::XMLout( $struct->{body}->{data_block}->{dt_assoc}->{item} );
-        $struct = XML::Simple::XMLin( $xml );
-        $xml = XML::Simple::XMLout( $struct->{attributes}->{item} );
-        $struct->{attributes} = XML::Simple::XMLin( $xml );
+        (undef, $struct) = _denastify( $struct->{body}->{data_block} );
     }
     else {
         $self->debug("HTTP error: " . $res->status_line);
@@ -1227,6 +1230,35 @@ sub _format
     }
 
     return $xml;
+}
+
+sub _denastify {
+    my ($arg) = ( shift );
+
+    if ( 0 ) {
+      eval { use Data::Dumper };
+      warn $@ if $@;
+      warn "_denastify\n". Dumper($arg) unless $@;
+    }
+
+    if ( ref($arg) eq 'HASH' ) {
+        my $value;
+        if ( exists( $arg->{content} ) ) {
+            $value = $arg->{content};
+        } elsif ( exists( $arg->{dt_array} ) ) {
+            my $array = $arg->{dt_array};
+            $array = [ $array ] unless ref($array) eq 'ARRAY';
+            $value = [ map {
+                               { map { _denastify($_) } @{ $_->{dt_assoc} } }
+                           }
+                       @$array
+                     ];
+        } elsif ( exists( $arg->{dt_assoc} ) ) {
+            $value = { map { _denastify($_) } @{ $arg->{dt_assoc} } };
+        }
+        return ( $arg->{key} => $value );
+    }
+    ();
 }
 
 =back
