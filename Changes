@@ -11,3 +11,7 @@
 
 0.04
    -  Correct de-nastification to handle lists
+
+0.05 Sun Jun 27 16:54:23 EDT 2010
+   -  Correct de-nastification to handle single item dt_assoc
+      (eg belongs_to_rsp response)

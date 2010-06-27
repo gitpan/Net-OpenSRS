@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Net-OpenSRS
-version:            0.04
+version:            0.05
 abstract:           Domain registration via the Tucows OpenSRS HTTPS XML API
 author:
     - Richard L. Siddall <opensrs@elirion.net>

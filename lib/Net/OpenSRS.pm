@@ -150,7 +150,7 @@ use XML::Simple;
 use Digest::MD5;
 use Date::Calc qw/ Add_Delta_Days Today This_Year /;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 my $rv;
 *hash = \&Digest::MD5::md5_hex;
 
@@ -1254,7 +1254,9 @@ sub _denastify {
                        @$array
                      ];
         } elsif ( exists( $arg->{dt_assoc} ) ) {
-            $value = { map { _denastify($_) } @{ $arg->{dt_assoc} } };
+            my $array = $arg->{dt_assoc};
+            $array = [ $array ] unless ref($array) eq 'ARRAY';
+            $value = { map { _denastify($_) } @$array };
         }
         return ( $arg->{key} => $value );
     }
