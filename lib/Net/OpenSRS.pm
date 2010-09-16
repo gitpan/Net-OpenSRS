@@ -150,7 +150,7 @@ use XML::Simple;
 use Digest::MD5;
 use Date::Calc qw/ Add_Delta_Days Today This_Year /;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 my $rv;
 *hash = \&Digest::MD5::md5_hex;
 
@@ -1194,6 +1194,24 @@ XML
     return $self->last_response(1);
 }
 
+# encode special characters
+
+my %encode_hash = (
+  '<' => '&lt;',
+  '>' => '&gt;',
+  "'" => '&apos;',
+  '"' => '&quot;',
+  '&' => '&amp;',
+);
+
+sub _encode
+{
+  my $arg = shift;
+  return $arg unless ($arg =~/\<|\>|\'|\"|\&/);
+  $arg =~ s/(\<|\>|\'|\"|\&)/$encode_hash{$1}/ge;
+  $arg
+}
+
 # format perl structs into opensrs XML
 sub _format
 {
@@ -1207,7 +1225,7 @@ sub _format
         my $c = 0;
         $xml .= "$sp<item key=\"$_\">\n";
         $xml .= "$sp  <dt_array>\n";
-        foreach (sort @$val) {
+        foreach (map { _encode($_) } sort @$val) {
             $xml .= "$sp    <item key=\"$c\">$_</item>\n";
             $c++;
         }
@@ -1226,6 +1244,7 @@ sub _format
     }
 
     else {
+        $val = _encode($val);
         $xml .= "$sp<item key=\"$_\">$val</item>\n";
     }
 

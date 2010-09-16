@@ -15,3 +15,7 @@
 0.05 Sun Jun 27 16:54:23 EDT 2010
    -  Correct de-nastification to handle single item dt_assoc
       (eg belongs_to_rsp response)
+
+0.06 Thu Sep 16 00:21:06 EDT 2010
+   -  escape the XML special characters
+
