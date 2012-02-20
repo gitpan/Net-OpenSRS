@@ -1,18 +1,27 @@
 --- #YAML:1.0
-name:                Net-OpenSRS
-version:             0.06
-abstract:            Domain registration via the Tucows OpenSRS HTTPS XML API
-license:             ~
-author:              
-    - Richard L. Siddall <opensrs@elirion.net>
-generated_by:        ExtUtils::MakeMaker version 6.42
-distribution_type:   module
-requires:     
-    Date::Calc:                    0
-    Digest::MD5:                   0
-    LWP::UserAgent:                0
-    Test::More:                    0
-    XML::Simple:                   0
+name:               Net-OpenSRS
+version:            0.07_01
+abstract:           Domain registration via the Tucows OpenSRS HTTPS XML API
+author:
+    - Ivan Kohler <ivan-opensrs@freeside.biz>
+license:            unknown
+distribution_type:  module
+configure_requires:
+    ExtUtils::MakeMaker:  0
+build_requires:
+    Test::More:  0
+requires:
+    Date::Calc:      0
+    Digest::MD5:     0
+    Locales:         0
+    LWP::UserAgent:  0
+    Number::Phone:   0
+    XML::Simple:     0
+no_index:
+    directory:
+        - t
+        - inc
+generated_by:       ExtUtils::MakeMaker version 6.57_05
 meta-spec:
-    url:     http://module-build.sourceforge.net/META-spec-v1.3.html
-    version: 1.3
+    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
+    version:  1.4
